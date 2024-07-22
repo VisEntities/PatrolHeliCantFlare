@@ -10,7 +10,7 @@ using Oxide.Core;
 namespace Oxide.Plugins
 {
     [Info("Patrol Heli Cant Flare", "VisEntities", "1.0.0")]
-    [Description(" ")]
+    [Description("Disables the flare functionality for patrol helicopters when targeted by homing missiles.")]
     public class PatrolHeliCantFlare : RustPlugin
     {
         #region Fields
