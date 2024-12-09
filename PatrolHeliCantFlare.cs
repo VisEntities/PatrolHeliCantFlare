@@ -7,10 +7,11 @@
 using HarmonyLib;
 using Newtonsoft.Json;
 using Oxide.Core;
+using Oxide.Core.Plugins;
 
 namespace Oxide.Plugins
 {
-    [Info("Patrol Heli Cant Flare", "VisEntities", "1.1.0")]
+    [Info("Patrol Heli Cant Flare", "VisEntities", "1.1.1")]
     [Description("Disables the flare functionality for patrol helicopters when targeted by homing missiles.")]
     public class PatrolHeliCantFlare : RustPlugin
     {
@@ -18,7 +19,6 @@ namespace Oxide.Plugins
 
         private static PatrolHeliCantFlare _plugin;
         private static Configuration _config;
-        private Harmony _harmony;
 
         #endregion Fields
 
@@ -88,13 +88,10 @@ namespace Oxide.Plugins
         private void Init()
         {
             _plugin = this;
-            _harmony = new Harmony(Name + "PATCH");
-            _harmony.PatchAll();
         }
 
         private void Unload()
         {
-            _harmony.UnpatchAll(Name + "PATCH");
             _config = null;
             _plugin = null;
         }
@@ -114,15 +111,16 @@ namespace Oxide.Plugins
 
         #region Helper Functions
 
-        private bool ChanceSucceeded(int chance)
+        private bool ChanceSucceeded(int percentage)
         {
-            return UnityEngine.Random.Range(0, 100) < chance;
+            return UnityEngine.Random.Range(0, 100) < percentage;
         }
 
         #endregion Helper Functions
 
         #region Harmony Patches
 
+        [AutoPatch]
         [HarmonyPatch(typeof(PatrolHelicopter), "OnEntityMessage")]
         public static class PatrolHelicopter_OnEntityMessage_Patch
         {
